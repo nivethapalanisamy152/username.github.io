@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anulom Vilom</title>
+    <style>
+        body { font-family: sans-serif; background: #2e7d32; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { text-align: center; background: white; color: #333; padding: 30px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        input { width: 50px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 5px; }
+        button { background: #2e7d32; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; font-size: 1.1rem; margin-top: 15px; }
+        #display { font-size: 4rem; color: #2e7d32; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>Anulom Vilom</h3>
+        <input id="in" type="number" value="4"> Inhale<br>
+        <input id="h" type="number" value="4"> Hold<br>
+        <input id="ex" type="number" value="8"> Exhale<br>
+        <button onclick="start()">START</button>
+        <div id="display">0</div>
+        <div id="status">Ready</div>
+    </div>
+    <script>
+        let ctx = new (window.AudioContext || window.webkitAudioContext)();
+        function beep() { let o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.setValueAtTime(300, ctx.currentTime); o.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.3); }
+        function start() { ctx.resume(); let i = +document.getElementById('in').value, h = +document.getElementById('h').value, e = +document.getElementById('ex').value; let count = 0, total = i+h+e;
+            setInterval(() => { count = (count % total) + 1; document.getElementById('display').innerText = count;
+                if(count==1 || count==i+1 || count==i+h+1) beep();
+                if(count==1) document.getElementById('status').innerText="Inhale";
+                else if(count==i+1) document.getElementById('status').innerText="Hold";
+                else if(count==i+h+1) document.getElementById('status').innerText="Exhale";
+            }, 1000); }
+    </script>
+</body>
+</html>
